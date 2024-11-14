@@ -28,3 +28,80 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+
+  
+# Build a docker image and publish it to AWS ECR using GitHub Actions
+# Build a docker image and publish it to AWS ECR using GitHub actions
+  buid-and-push:
+    name: Build and push to ECR
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    # marketplace - "Configure AWS Credentials" Action for GitHub Actions
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-2
+        # role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+        # role-external-id: ${{ secrets.AWS_ROLE_EXTERNAL_ID }}
+        # role-duration-seconds: 1200
+        # role-session-name: MySessionName
+    
+    # marketplace - Amazon ECR "Login" Action for GitHub Actions
+    # ogin to Amazon ECR Private, then build and push a Docker image
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build, tag, and push docker image to Amazon ECR
+      env:
+        REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        REPOSITORY: dcw-website
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+    
+    # Give github actions permission to push docker images to ECR
+    # create repository dcw-webiste in ECR
+    # create IAM policy and a user in IAM
+    # below Policy Json file, find in AWS-Documentation-Amazon ECR- User Guide
+    # https://docs.aws.amazon.com/AmazonECR/latest/userguide/security_iam_id-based-policy-examples.html
+#     {
+#    "Version":"2012-10-17",
+#    "Statement":[
+#       {
+#          "Sid":"GetAuthorizationToken",
+#          "Effect":"Allow",
+#          "Action":[
+#             "ecr:GetAuthorizationToken"
+#          ],
+#          "Resource":"*"
+#       },
+#       {
+#          "Effect":"Allow",
+#          "Action":[
+#                 "ecr:BatchCheckLayerAvailability",
+#                 "ecr:GetDownloadUrlForLayer",
+#                 "ecr:GetRepositoryPolicy",
+#                 "ecr:DescribeRepositories",
+#                 "ecr:ListImages",
+#                 "ecr:DescribeImages",
+#                 "ecr:BatchGetImage", 
+#                 "ecr:InitiateLayerUpload",
+#                 "ecr:UploadLayerPart",
+#                 "ecr:CompleteLayerUpload",
+#                 "ecr:PutImage"
+#          ],
+#          "Resource":"arn:aws:ecr:ap-southeast-2:443370702390:repository/dcw-website" 
+#       }
+#    ]
+# }
+
+
+  
