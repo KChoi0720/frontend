@@ -22,6 +22,11 @@ steps:
     npm run build
   displayName: 'npm install and build'
 
+- script: |
+    mkdir -p $(Build.ArtifactStagingDirectory)
+    cp -r build/* $(Build.ArtifactStagingDirectory)
+  displayName: 'Copy files to Artifact Staging Directory'
+
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
