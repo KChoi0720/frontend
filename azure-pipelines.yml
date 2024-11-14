@@ -9,11 +9,11 @@ trigger:
     - main
 
 variables:
-  uiName: 'dcw'
+  uiName: 'dcwnew'
   uiBuild: '$(uiSource)/build' 
 
 pool:
-  name: ubuntu-aws1
+  name: ubuntu-aws
 
 steps:
 
