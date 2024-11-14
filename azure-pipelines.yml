@@ -8,24 +8,45 @@ trigger:
     include: 
     - main
 
+variables:
+  uiName: 'dcw'
+  uiBuild: '$(uiSource)/build'
+
+
 pool:
   name: ubuntu-aws1
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '20.x'
-  displayName: 'Install Node.js'
 
 - script: |
     npm install
-    npm run build
-  displayName: 'npm install and build'
+  displayName: 'npm install'
 
 - script: |
-    mkdir -p $(Build.ArtifactStagingDirectory)
-    cp -r build/* $(Build.ArtifactStagingDirectory)
-  displayName: 'Copy files to Artifact Staging Directory'
+    npm run-script build
+  displayName: 'npm build'
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      cd build
+      sed -i 's/\/static/\/dashboards\mcdonalds\/\static/g' index.html
+      mkdir -p login
+      mkdir -p selectinfo
+      mkdir -p dashboard
+      cp index.html dashboard/
+      cp index.html login/
+      cp index.html selectinfo/
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(System.DefaultworkingDirectory)/build'
+    includeRootFolder: true
+    archiveType: 'tar'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tar.gz'
+    replaceExistingArchive: true
+
+
 
 - task: PublishBuildArtifacts@1
   inputs:
