@@ -10,7 +10,7 @@ trigger:
 
 variables:
   uiName: 'dcw'
-  uiBuild: '$(uiSource)/build'
+  uiBuild: '$(System.DefaultWorkingDirectory)/build' 
 
 pool:
   name: ubuntu-aws1
@@ -22,18 +22,18 @@ steps:
   displayName: 'npm install'
 
 - script: |
-    npm run-script build
+    npm run build
   displayName: 'npm build'
 
 # Verify or manipulate build output (new command)
 - script: |
-    ls -l $(System.DefaultWorkingDirectory)/build
+    ls -l $(uiBuild)
     echo "Build output verified"
   displayName: 'Verify build output'
 
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(System.DefaultworkingDirectory)/build'
+    rootFolderOrFile: '$(uiBuild)'
     includeRootFolder: false
     archiveType: 'tar'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(uiName).tar.gz'
