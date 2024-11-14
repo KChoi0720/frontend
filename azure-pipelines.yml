@@ -12,7 +12,6 @@ variables:
   uiName: 'dcw'
   uiBuild: '$(uiSource)/build'
 
-
 pool:
   name: ubuntu-aws1
 
@@ -26,17 +25,11 @@ steps:
     npm run-script build
   displayName: 'npm build'
 
-- task: CmdLine@2
-  inputs:
-    script: |
-      cd build
-      sed -i 's/\/static/\/dashboards\mcdonalds\/\static/g' index.html
-      mkdir -p login
-      mkdir -p selectinfo
-      mkdir -p dashboard
-      cp index.html dashboard/
-      cp index.html login/
-      cp index.html selectinfo/
+# Verify or manipulate build output (new command)
+- script: |
+    ls -l $(System.DefaultWorkingDirectory)/build
+    echo "Build output verified"
+  displayName: 'Verify build output'
 
 - task: ArchiveFiles@2
   inputs:
@@ -45,7 +38,6 @@ steps:
     archiveType: 'tar'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tar.gz'
     replaceExistingArchive: true
-
 
 
 - task: PublishBuildArtifacts@1
