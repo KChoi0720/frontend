@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-asws1
+  name: ubuntu-aws1
 
 steps:
 - task: NodeTool@0
