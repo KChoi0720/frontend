@@ -19,3 +19,4 @@ describe('App Component', () => {
     expect(screen.getByText('This is a simple React app with a top navbar.')).toBeInTheDocument();
   });
 });
+
