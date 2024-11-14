@@ -14,7 +14,7 @@ steps:
   # Set up Node.js (required to run npm)
   - task: UseNode@1
     inputs:
-      version: '20.x'
+      version: '22.x'
       addToPath: true
     displayName: 'Set up Node.js'
 
@@ -35,6 +35,7 @@ steps:
   # Publish one artifact
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      PathtoPublish: '$(Build.SourcesDirectory)/build'  # path to the build directory
       ArtifactName: 'drop'
       publishLocation: 'Container'
+
