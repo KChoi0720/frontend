@@ -7,7 +7,7 @@ function NavBar() {
     <nav className="bg-black text-white px-4 py-4">
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-4">
-          <img src={logo} alt="Logo" className="h-15 w-10" />
+          <img src={logo} alt="Logo" className="h-15 w-11" />
           <h1 className="text-xl font-bold">DevOps</h1>
         </div>
         <ul className="flex space-x-6">
