@@ -63,6 +63,12 @@ jobs:
       run: |
         bash ./build/git_update.sh -v major
     # above can change the patch to major, then change the major tag
+
+    - name: Push Git Tag to GitHub
+      env:
+        GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
+      run: |
+        git push origin $GIT_TAG    
     
     - name: Build, tag, and push docker image to Amazon ECR
       env:
