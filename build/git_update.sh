@@ -26,7 +26,7 @@ echo "Current Version: $CURRENT_VERSION"
 CURRENT_VERSION_PARTS=(${CURRENT_VERSION//./ })
 
 # get number parts
-VNUM1=${CURRENT_VERSION_PARTS[0]}
+VNUM1=${CURRENT_VERSION_PARTS[0]#v}
 VNUM2=${CURRENT_VERSION_PARTS[1]}
 VNUM3=${CURRENT_VERSION_PARTS[2]}
 
@@ -45,7 +45,7 @@ else
 fi
 
 # create new tag
-NEW_TAG="$VNUM1.$VNUM2.$VNUM3"
+NEW_TAG="v$VNUM1.$VNUM2.$VNUM3"
 echo "($VERSION) updating $CURRENT_VERSION to $NEW_TAG"
 
 # get current hash and see if it already has a tag
