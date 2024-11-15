@@ -26,7 +26,7 @@ echo "Current Version: $CURRENT_VERSION"
 CURRENT_VERSION_PARTS=(${CURRENT_VERSION//./ })
 
 # get number parts
-VNUM1=${CURRENT_VERSION_PARTS[0]#v}
+VNUM1=${CURRENT_VERSION_PARTS[0]}
 VNUM2=${CURRENT_VERSION_PARTS[1]}
 VNUM3=${CURRENT_VERSION_PARTS[2]}
 
@@ -35,10 +35,10 @@ then
   VNUM1=v$((VNUM1+1))
 elif [[ $VERSION == 'minor' ]]
 then
-  VNUM2=v$((VNUM2+1))
+  VNUM2=$((VNUM2+1))
 elif [[ $VERSION == 'patch' ]]
 then
-  VNUM3=v$((VNUM3+1))
+  VNUM3=$((VNUM3+1))
 else
   echo "No version type (https://semver.org/) or incorrect type specified, try: -v [major, minor, patch]"
   exit 1
